@@ -1,0 +1,54 @@
+import pandas as pd
+import random 
+
+#Create a list
+Class_Hitdie = {'Class':['Artificer','Barbarian','Bard','Cleric','Druid','Fighter','Monk','Paladin','Ranger','Rogue','Sorcerer','Warlock','Wizard'],
+'Hit Dice':['d8','d12','d8','d8','d8','d10','d10','d8','d10','d8','d6','d8','d6'],
+'Dice Sides':[8,12,8,8,8,10,10,8,10,8,6,8,6]}
+#Creating the Dataframe
+df = pd.DataFrame(Class_Hitdie).set_index('Class')
+
+#Getting the input from the user
+Your_Class = input("Tell me your Class, For Example Wizard:")
+Your_Level = input("Tell me your Level, For Example 3:")
+Your_Con = input("What is your Constitution Modifer? For Example +2")
+print("So you are a ", Your_Class," at level ",Your_Level ,",with a ", Your_Con ," modifier to constitution" )
+Your_Con_Number = int(Your_Con)
+
+# Returning Value of 'Dice Sides' For a certain 'Class'
+Your_Sides = df.loc[Your_Class, 'Dice Sides']
+print('That means your Hit Dice has', Your_Sides ,'Sides')
+
+# Generate Rolls for Hit Points
+#Hitpoints = random.randint(1, int(Your_Sides)) 
+Your_Level_Number = int(Your_Level)
+#print(Hitpoints)
+
+#Roll Dice For Hitpoints
+def roll_dice(Your_Level_Number):
+    """Return a list of integers with length `num_dice`.
+
+    Each integer in the returned list is a random number between
+    1 and 6, inclusive.
+    """
+    roll_results = []
+    for _ in range(Your_Level_Number):
+        roll = random.randint(1, int(Your_Sides))
+        roll_results.append(roll)
+    return roll_results
+    
+#Print Hitpoints
+All_Rolls = roll_dice(Your_Level_Number)
+print('Your Dice rolls are', All_Rolls)
+Level_Con = Your_Con_Number * Your_Level_Number
+new = []
+
+for x in range(len(All_Rolls)): 
+
+    if sum([All_Rolls[x] + Your_Con_Number]) > 1 :
+        new.append(sum([All_Rolls[x] + Your_Con_Number]))
+    else:
+        new.append(1)
+
+print(new)
+print('This means your Hitpoint total is', sum(new))
